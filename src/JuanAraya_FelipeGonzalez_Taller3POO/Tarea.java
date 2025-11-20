@@ -1,6 +1,6 @@
 package JuanAraya_FelipeGonzalez_Taller3POO;
 
-public class Tarea {
+public abstract class Tarea {
 	private String proyectoId;
 	private String id;
 	private String tipo;
@@ -31,6 +31,8 @@ public class Tarea {
 		this.complejidad = complejidad;
 		this.fecha = fecha;
 	}
+	
+	public abstract void accept(VisitorTarea visitor);
 
 	public String getProyectoId() {
 		return proyectoId;
