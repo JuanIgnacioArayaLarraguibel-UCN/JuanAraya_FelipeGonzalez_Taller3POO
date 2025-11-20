@@ -1,5 +1,6 @@
 package JuanAraya_FelipeGonzalez_Taller3POO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PrioridadPorComplejidad implements EstrategiaPrioridad{
@@ -23,8 +24,20 @@ public class PrioridadPorComplejidad implements EstrategiaPrioridad{
 
 	@Override
 	public List<Tarea> priorizar(List<Tarea> tareas) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Tarea> tareasOrdenadas = new ArrayList<>(tareas);
+		for(int i=0; i<tareasOrdenadas.size()-1; i++) {
+			for(int j=0; j< tareasOrdenadas.size()-i-1; j++) {
+				int comp1 = obtenerValorComplejidad(tareasOrdenadas.get(j).getComplejidad());
+				int comp2 = obtenerValorComplejidad(tareasOrdenadas.get(j+1).getComplejidad());
+				
+				if(comp1<comp2) {
+					Tarea temp = tareasOrdenadas.get(j);
+					tareasOrdenadas.set(j, tareasOrdenadas.get(j+1));
+					tareasOrdenadas.set(j+1, temp);
+				}
+			}
+		}
+		return tareasOrdenadas;
 	}
 
 }
