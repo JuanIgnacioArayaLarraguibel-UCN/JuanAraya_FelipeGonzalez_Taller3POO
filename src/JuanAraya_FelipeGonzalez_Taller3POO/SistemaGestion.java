@@ -155,5 +155,72 @@ public class SistemaGestion {
         System.out.println("Usuario o contraseña incorrectos.");
         return false;
     }
+    
+    public void logout() {
+        usuarioActual = null;
+        System.out.println("Sesión cerrada.");
+    }
+    
+    public void ejecutar() {
+        while (true) {
+            if (usuarioActual == null) {
+                if (!login()) {
+                    continue;
+                }
+            }
+            
+            if (usuarioActual.getRol().equals("Administrador")) {
+                menuAdministrador();
+            } else {
+                menuColaborador();
+            }
+        }
+    }
+    
+    private void menuAdministrador() {
+        while (usuarioActual != null && usuarioActual.getRol().equals("Administrador")) {
+            System.out.println("Menú Administrador= ");
+            System.out.println("1. Ver lista completa de proyectos y tareas");
+            System.out.println("2. Agregar proyecto");
+            System.out.println("3. Eliminar proyecto");
+            System.out.println("4. Agregar tarea");
+            System.out.println("5. Eliminar tarea");
+            System.out.println("6. Asignar prioridades");
+            System.out.println("7. Generar reporte de proyectos");
+            System.out.println("8. Cerrar sesión");
+            System.out.print("Seleccione una opción: ");
+            
+            String opcion = scanner.nextLine();
+            
+            switch (opcion) {
+                case "1":
+                    verProyectosYTareasCompleto();
+                    break;
+                case "2":
+                    agregarProyecto();
+                    break;
+                case "3":
+                    eliminarProyecto();
+                    break;
+                case "4":
+                    agregarTarea();
+                    break;
+                case "5":
+                    eliminarTarea();
+                    break;
+                case "6":
+                    menuPrioridades();
+                    break;
+                case "7":
+                    generarReporte();
+                    break;
+                case "8":
+                    logout();
+                    return;
+                default:
+                    System.out.println("Opción inválida.");
+            }
+        }
+    }
 
 }
