@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import taller3pooprueba2.Proyecto;
-import taller3pooprueba2.Tarea;
-import taller3pooprueba2.TareaFactory;
 
 public class SistemaGestion {
 	// supongo que aqui ira todo el desastre?

@@ -3,8 +3,6 @@ package JuanAraya_FelipeGonzalez_Taller3POO;
 import java.util.ArrayList;
 import java.util.List;
 
-import taller3pooprueba2.Tarea;
-
 public class Proyecto {
     private String id;
     private String nombre;
