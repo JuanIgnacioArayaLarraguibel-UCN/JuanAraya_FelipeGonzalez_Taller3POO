@@ -2,10 +2,12 @@ package JuanAraya_FelipeGonzalez_Taller3POO;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 
 public class SistemaGestion {
 	// supongo que aqui ira todo el desastre?
@@ -110,6 +112,48 @@ public class SistemaGestion {
         } catch (FileNotFoundException e) {
             System.out.println("Error al cargar tareas: " + e.getMessage());
         }
+    }
+	
+	private void guardarProyectos() {
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter("proyectos.txt"));
+            for (Proyecto proyecto : proyectos) {
+                writer.println(proyecto.toString());
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error al guardar proyectos: " + e.getMessage());
+        }
+    }
+    
+    private void guardarTareas() {
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter("tareas.txt"));
+            for (Tarea tarea : todasLasTareas) {
+                writer.println(tarea.toString());
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error al guardar tareas: " + e.getMessage());
+        }
+    }
+    public boolean login() {
+        System.out.println("Iniciar Sesión= ");
+        System.out.print("Usuario: ");
+        String username = scanner.nextLine();
+        System.out.print("Contraseña: ");
+        String password = scanner.nextLine();
+        
+        for (Usuario usuario : usuarios) {
+            if (usuario.getUsername().equals(username) && usuario.getPassword().equals(password)) {
+                usuarioActual = usuario;
+                System.out.println("Bienvenido, " + username);
+                return true;
+            }
+        }
+        
+        System.out.println("Usuario o contraseña incorrectos.");
+        return false;
     }
 
 }
