@@ -222,5 +222,300 @@ public class SistemaGestion {
             }
         }
     }
+    
+    private void verProyectosYTareasCompleto() {
+        System.out.println("Lista de Tareas y Proyectos");
+        for (Proyecto proyecto : proyectos) {
+            System.out.println("\nPROYECTO: " + proyecto.getNombre() + " (ID: " + proyecto.getId() + ")");
+            System.out.println("Responsable: " + proyecto.getResponsable());
+            System.out.println("Tareas:");
+            
+            if (proyecto.getTareas().isEmpty()) {
+                System.out.println("  No hay tareas asignadas.");
+            } else {
+                for (Tarea tarea : proyecto.getTareas()) {
+                    System.out.println("  - " + tarea.getId() + ": " + tarea.getDescripcion() + 
+                                     " [" + tarea.getTipo() + ", " + tarea.getEstado() + "]");
+                }
+            }
+        }
+    }
+    
+    private void agregarProyecto() {
+        System.out.println("Agregar Proyecto");
+        System.out.print("ID del proyecto: ");
+        String id = scanner.nextLine();
+        System.out.print("Nombre del proyecto: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Responsable: ");
+        String responsable = scanner.nextLine();
+        
+        // Verificar si el ID ya existe
+        for (Proyecto proyecto : proyectos) {
+            if (proyecto.getId().equals(id)) {
+                System.out.println("Error: Ya existe un proyecto con ese ID.");
+                return;
+            }
+        }
+        
+        proyectos.add(new Proyecto(id, nombre, responsable));
+        guardarProyectos();
+        System.out.println("Proyecto agregado exitosamente.");
+    }
+    
+    private void eliminarProyecto() {
+        System.out.println("Eliminar Proyecto");
+        System.out.print("ID del proyecto a eliminar: ");
+        String id = scanner.nextLine();
+        
+        Proyecto proyectoAEliminar = null;
+        for (Proyecto proyecto : proyectos) {
+            if (proyecto.getId().equals(id)) {
+                proyectoAEliminar = proyecto;
+                break;
+            }
+        }
+        
+        if (proyectoAEliminar != null) {
+          
+            List<Tarea> tareasAEliminar = new ArrayList<>();
+            for (Tarea tarea : todasLasTareas) {
+                if (tarea.getProyectoId().equals(id)) {
+                    tareasAEliminar.add(tarea);
+                }
+            }
+            todasLasTareas.removeAll(tareasAEliminar);
+            
+            proyectos.remove(proyectoAEliminar);
+            guardarProyectos();
+            guardarTareas();
+            System.out.println("Proyecto y sus tareas eliminados exitosamente.");
+        } else {
+            System.out.println("No se encontró el proyecto con ID: " + id);
+        }
+    }
+    
+    private void agregarTarea() {
+        System.out.println("Agregar Tarea");
+        System.out.print("ID del proyecto: ");
+        String proyectoId = scanner.nextLine();
+        
+        Proyecto proyectoSeleccionado = null;
+        for (Proyecto proyecto : proyectos) {
+            if (proyecto.getId().equals(proyectoId)) {
+                proyectoSeleccionado = proyecto;
+                break;
+            }
+        }
+        
+        if (proyectoSeleccionado == null) {
+            System.out.println("Error: No existe el proyecto con ID: " + proyectoId);
+            return;
+        }
+        
+        System.out.print("ID de la tarea: ");
+        String tareaId = scanner.nextLine();
+        
+        for (Tarea tarea : todasLasTareas) {
+            if (tarea.getId().equals(tareaId)) {
+                System.out.println("Error: Ya existe una tarea con ese ID.");
+                return;
+            }
+        }
+        
+        System.out.println("Tipo de tarea:");
+        System.out.println("1. Bug");
+        System.out.println("2. Feature");
+        System.out.println("3. Documentación");
+        System.out.print("Seleccione: ");
+        String tipoOpcion = scanner.nextLine();
+        
+        String tipo = "";
+        switch (tipoOpcion) {
+            case "1": tipo = "Bug"; break;
+            case "2": tipo = "Feature"; break;
+            case "3": tipo = "Documentacion"; break;
+            default:
+                System.out.println("Opción inválida.");
+                return;
+        }
+        
+        System.out.print("Descripción: ");
+        String descripcion = scanner.nextLine();
+        
+        System.out.println("Estado inicial:");
+        System.out.println("1. Pendiente");
+        System.out.println("2. En progreso");
+        System.out.print("Seleccione: ");
+        String estadoOpcion = scanner.nextLine();
+        
+        String estado = estadoOpcion.equals("2") ? "En progreso" : "Pendiente";
+        
+        System.out.print("Responsable: ");
+        String responsable = scanner.nextLine();
+        
+        System.out.println("Complejidad:");
+        System.out.println("1. Baja");
+        System.out.println("2. Media");
+        System.out.println("3. Alta");
+        System.out.print("Seleccione: ");
+        String compOpcion = scanner.nextLine();
+        
+        String complejidad = "Media";
+        switch (compOpcion) {
+            case "1": complejidad = "Baja"; break;
+            case "3": complejidad = "Alta"; break;
+        }
+        
+        String fecha = obtenerFechaActual();
+        
+        
+        if (!verificarDisponibilidadResponsable(responsable, fecha)) {
+            System.out.println("Error: El responsable ya tiene una tarea asignada para esta fecha.");
+            return;
+        }
+        
+        Tarea nuevaTarea = TareaFactory.crearTarea(
+            proyectoId, tareaId, tipo, descripcion, estado, responsable, complejidad, fecha
+        );
+        
+        if (nuevaTarea != null) {
+            todasLasTareas.add(nuevaTarea);
+            proyectoSeleccionado.agregarTarea(nuevaTarea);
+            guardarTareas();
+            System.out.println("Tarea agregada exitosamente.");
+        }
+    }
+    
+    private boolean verificarDisponibilidadResponsable(String responsable, String fecha) {
+        for (Tarea tarea : todasLasTareas) {
+            if (tarea.getResponsable().equals(responsable) && tarea.getFecha().equals(fecha)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private void eliminarTarea() {
+        System.out.println("Eliminar Tarea");
+        System.out.print("ID de la tarea a eliminar: ");
+        String tareaId = scanner.nextLine();
+        
+        Tarea tareaAEliminar = null;
+        for (Tarea tarea : todasLasTareas) {
+            if (tarea.getId().equals(tareaId)) {
+                tareaAEliminar = tarea;
+                break;
+            }
+        }
+        
+        if (tareaAEliminar != null) {
+            // Eliminar tarea del proyecto
+            for (Proyecto proyecto : proyectos) {
+                if (proyecto.getId().equals(tareaAEliminar.getProyectoId())) {
+                    proyecto.eliminarTarea(tareaId);
+                    break;
+                }
+            }
+            
+            todasLasTareas.remove(tareaAEliminar);
+            guardarTareas();
+            System.out.println("Tarea eliminada exitosamente.");
+        } else {
+            System.out.println("No se encontró la tarea con ID: " + tareaId);
+        }
+    }
+    
+    private void menuPrioridades() {
+        System.out.println("Asignar Prioridades");
+        System.out.println("1. Priorizar por fecha de creación");
+        System.out.println("2. Priorizar por impacto");
+        System.out.println("3. Priorizar por complejidad");
+        System.out.print("Seleccione estrategia: ");
+        
+        String opcion = scanner.nextLine();
+        
+        switch (opcion) {
+            case "1":
+                estrategiaPrioridad = new PrioridadPorFecha();
+                break;
+            case "2":
+                estrategiaPrioridad = new PrioridadPorImpacto();
+                break;
+            case "3":
+                estrategiaPrioridad = new PrioridadPorComplejidad();
+                break;
+            default:
+                System.out.println("Opción inválida.");
+                return;
+        }
+        
+        System.out.print("ID del proyecto (o 'all' para todos): ");
+        String proyectoId = scanner.nextLine();
+        
+        List<Tarea> tareasAPriorizar = new ArrayList<>();
+        
+        if (proyectoId.equals("all")) {
+            tareasAPriorizar = new ArrayList<>(todasLasTareas);
+        } else {
+            for (Tarea tarea : todasLasTareas) {
+                if (tarea.getProyectoId().equals(proyectoId)) {
+                    tareasAPriorizar.add(tarea);
+                }
+            }
+        }
+        
+        if (tareasAPriorizar.isEmpty()) {
+            System.out.println("No hay tareas para priorizar.");
+            return;
+        }
+        
+        List<Tarea> tareasPriorizadas = estrategiaPrioridad.priorizar(tareasAPriorizar);
+        
+        System.out.println("Tareas Priorizadas");
+        for (Tarea tarea : tareasPriorizadas) {
+            System.out.println("- " + tarea.getId() + ": " + tarea.getDescripcion() + 
+                             " [" + tarea.getTipo() + ", " + tarea.getEstado() + 
+                             ", " + tarea.getComplejidad() + ", " + tarea.getFecha() + "]");
+        }
+    }
+    
+    private void generarReporte() {
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter("reporte.txt"));
+            
+            writer.println("Reporte de Proyecto - " + obtenerFechaActual());
+            writer.println();
+            
+            for (Proyecto proyecto : proyectos) {
+                writer.println("Proyecto: " + proyecto.getNombre() + " (ID: " + proyecto.getId() + ")");
+                writer.println("Responsable: " + proyecto.getResponsable());
+                writer.println("Tareas asignadas: " + proyecto.getTareas().size());
+                writer.println();
+                
+                if (!proyecto.getTareas().isEmpty()) {
+                    writer.println("Detalle de tarea:");
+                    for (Tarea tarea : proyecto.getTareas()) {
+                        writer.println("  - " + tarea.getId() + ": " + tarea.getDescripcion());
+                        writer.println("    Tipo: " + tarea.getTipo() + " | Estado: " + tarea.getEstado());
+                        writer.println("    Responsable: " + tarea.getResponsable() + " | Complejidad: " + tarea.getComplejidad());
+                        writer.println("    Fecha: " + tarea.getFecha());
+                        writer.println();
+                    }
+                }
+                writer.println("---");
+                writer.println();
+            }
+            
+            writer.close();
+            System.out.println("Reporte generado exitosamente en 'reporte.txt'");
+        } catch (IOException e) {
+            System.out.println("Error al generar reporte: " + e.getMessage());
+        }
+    }
+    
+    private String obtenerFechaActual() {
+        return "2025-11-21"; 
+    }
 
 }
