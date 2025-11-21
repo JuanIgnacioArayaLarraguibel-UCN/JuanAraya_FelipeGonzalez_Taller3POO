@@ -65,4 +65,13 @@ public abstract class Tarea {
 	public String getFecha() {
 		return fecha;
 	}	
+	
+	public void setEstado(String estado) { this.estado = estado; }
+    public void setResponsable(String responsable) { this.responsable = responsable; }
+        
+    @Override
+    public String toString() {
+        return proyectoId + "|" + id + "|" + tipo + "|" + descripcion + "|" + 
+               estado + "|" + responsable + "|" + complejidad + "|" + fecha;
+    }
 }

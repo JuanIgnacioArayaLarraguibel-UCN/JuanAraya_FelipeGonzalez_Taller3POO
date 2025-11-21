@@ -226,7 +226,7 @@ public class SistemaGestion {
     private void verProyectosYTareasCompleto() {
         System.out.println("Lista de Tareas y Proyectos");
         for (Proyecto proyecto : proyectos) {
-            System.out.println("\nPROYECTO: " + proyecto.getNombre() + " (ID: " + proyecto.getId() + ")");
+            System.out.println("Proyecto: " + proyecto.getNombre() + " (ID: " + proyecto.getId() + ")");
             System.out.println("Responsable: " + proyecto.getResponsable());
             System.out.println("Tareas:");
             
@@ -516,6 +516,137 @@ public class SistemaGestion {
     
     private String obtenerFechaActual() {
         return "2025-11-21"; 
+    }
+    
+    private void menuColaborador() {
+        while (usuarioActual != null && usuarioActual.getRol().equals("Colaborador")) {
+            System.out.println("Menú colaborador");
+            System.out.println("1. Ver proyectos disponibles");
+            System.out.println("2. Ver mis tareas asignadas");
+            System.out.println("3. Actualizar estado de una tarea");
+            System.out.println("4. Aplicar Visitor sobre tareas");
+            System.out.println("5. Cerrar sesión");
+            System.out.print("Seleccione una opción: ");
+            
+            String opcion = scanner.nextLine();
+            
+            switch (opcion) {
+                case "1":
+                    verProyectosDisponibles();
+                    break;
+                case "2":
+                    verMisTareas();
+                    break;
+                case "3":
+                    actualizarEstadoTarea();
+                    break;
+                case "4":
+                    aplicarVisitorTareas();
+                    break;
+                case "5":
+                    logout();
+                    return;
+                default:
+                    System.out.println("Opción inválida.");
+            }
+        }
+    }
+    
+    
+    private void verProyectosDisponibles() {
+        System.out.println("Proyectos");
+        for (Proyecto proyecto : proyectos) {
+            System.out.println("- " + proyecto.getId() + ": " + proyecto.getNombre());
+            System.out.println("  Responsable: " + proyecto.getResponsable());
+            System.out.println("  Tareas totales: " + proyecto.getTareas().size());
+        }
+    }
+    
+    private void verMisTareas() {
+        System.out.println("Tareas Asignadas");
+        String miUsuario = usuarioActual.getUsername();
+        boolean tieneTareas = false;
+        
+        for (Proyecto proyecto : proyectos) {
+            for (Tarea tarea : proyecto.getTareas()) {
+                if (tarea.getResponsable().equals(miUsuario)) {
+                    if (!tieneTareas) {
+                        tieneTareas = true;
+                    }
+                    System.out.println("- Proyecto: " + proyecto.getNombre());
+                    System.out.println("  Tarea: " + tarea.getId() + " - " + tarea.getDescripcion());
+                    System.out.println("  Tipo: " + tarea.getTipo() + " | Estado: " + tarea.getEstado());
+                    System.out.println("  Complejidad: " + tarea.getComplejidad() + " | Fecha: " + tarea.getFecha());
+                    System.out.println();
+                }
+            }
+        }
+        
+        if (!tieneTareas) {
+            System.out.println("No tienes tareas asignadas.");
+        }
+    }
+    
+    private void actualizarEstadoTarea() {
+        System.out.println("Actualizar Estado de Tarea");
+        System.out.print("ID de la tarea: ");
+        String tareaId = scanner.nextLine();
+        
+        Tarea tareaActualizar = null;
+        for (Tarea tarea : todasLasTareas) {
+            if (tarea.getId().equals(tareaId) && tarea.getResponsable().equals(usuarioActual.getUsername())) {
+                tareaActualizar = tarea;
+                break;
+            }
+        }
+        
+        if (tareaActualizar == null) {
+            System.out.println("No se encontró la tarea o no eres el responsable.");
+            return;
+        }
+        
+        System.out.println("Tarea actual: " + tareaActualizar.getDescripcion());
+        System.out.println("Estado actual: " + tareaActualizar.getEstado());
+        System.out.println("\nSeleccione nuevo estado:");
+        System.out.println("1. Pendiente");
+        System.out.println("2. En progreso");
+        System.out.println("3. Completada");
+        System.out.print("Seleccione: ");
+        String estadoOpcion = scanner.nextLine();
+        
+        String nuevoEstado = "";
+        switch (estadoOpcion) {
+            case "1": nuevoEstado = "Pendiente"; break;
+            case "2": nuevoEstado = "En progreso"; break;
+            case "3": nuevoEstado = "Completada"; break;
+            default:
+                System.out.println("Opción inválida.");
+                return;
+        }
+        
+        tareaActualizar.setEstado(nuevoEstado);
+        guardarTareas();
+        System.out.println("Estado actualizado exitosamente a: " + nuevoEstado);
+    }
+    
+    private void aplicarVisitorTareas() {
+        System.out.println("Aplicar Visitor a tareas");
+        String miUsuario = usuarioActual.getUsername();
+        VisitorAcciones visitor = new VisitorAcciones();
+        boolean tieneTareas = false;
+        
+        for (Tarea tarea : todasLasTareas) {
+            if (tarea.getResponsable().equals(miUsuario)) {
+                if (!tieneTareas) {
+                    tieneTareas = true;
+                }
+                tarea.accept(visitor);
+            }
+        }
+        
+        if (!tieneTareas) {
+            System.out.println("No tienes tareas asignadas para aplicar acciones.");
+        }
     }
 
 }
