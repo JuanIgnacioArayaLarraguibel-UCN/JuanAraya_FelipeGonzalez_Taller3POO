@@ -1,9 +1,14 @@
 package JuanAraya_FelipeGonzalez_Taller3POO;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import taller3pooprueba2.Proyecto;
+import taller3pooprueba2.Tarea;
+import taller3pooprueba2.TareaFactory;
 
 public class SistemaGestion {
 	// supongo que aqui ira todo el desastre?
@@ -60,5 +65,54 @@ public class SistemaGestion {
 			System.out.println("Error al cargar usuarios: " + e.getMessage());
 		}
 	}
+	
+	private void cargarProyectos() {
+        try {
+            File archivo = new File("proyectos.txt");
+            Scanner lector = new Scanner(archivo);
+            
+            while (lector.hasNextLine()) {
+                String linea = lector.nextLine();
+                String[] partes = linea.split("\\|");
+                if (partes.length == 3) {
+                    proyectos.add(new Proyecto(partes[0], partes[1], partes[2]));
+                }
+            }
+            lector.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error al cargar proyectos: " + e.getMessage());
+        }
+    }
+	
+	private void cargarTareas() {
+        try {
+            File archivo = new File("tareas.txt");
+            Scanner lector = new Scanner(archivo);
+            
+            while (lector.hasNextLine()) {
+                String linea = lector.nextLine();
+                String[] partes = linea.split("\\|");
+                if (partes.length == 8) {
+                    Tarea tarea = TareaFactory.crearTarea(
+                        partes[0], partes[1], partes[2], partes[3], 
+                        partes[4], partes[5], partes[6], partes[7]
+                    );
+                    
+                    if (tarea != null) {
+                        todasLasTareas.add(tarea);
+                        for (Proyecto proyecto : proyectos) {
+                            if (proyecto.getId().equals(partes[0])) {
+                                proyecto.agregarTarea(tarea);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            lector.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error al cargar tareas: " + e.getMessage());
+        }
+    }
 
 }

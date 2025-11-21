@@ -3,6 +3,8 @@ package JuanAraya_FelipeGonzalez_Taller3POO;
 import java.util.ArrayList;
 import java.util.List;
 
+import taller3pooprueba2.Tarea;
+
 public class Proyecto {
     private String id;
     private String nombre;
@@ -33,4 +35,31 @@ public class Proyecto {
 	public List<Tarea> getTareas() {
 		return tareas;
 	}
+	/*
+	 * tarea agregada
+	 */
+	public void agregarTarea(Tarea tarea) {
+        tareas.add(tarea);
+    }
+	public void eliminarTarea(String tareaId) {
+        for (int i = 0; i < tareas.size(); i++) {
+            if (tareas.get(i).getId().equals(tareaId)) {
+                tareas.remove(i);
+                break;
+            }
+        }
+    }
+    public Tarea buscarTarea(String tareaId) {
+        for (Tarea tarea : tareas) {
+            if (tarea.getId().equals(tareaId)) {
+                return tarea;
+            }
+        }
+        return null;
+    }
+    
+    @Override
+    public String toString() {
+        return id + "|" + nombre + "|" + responsable;
+    }
 }
