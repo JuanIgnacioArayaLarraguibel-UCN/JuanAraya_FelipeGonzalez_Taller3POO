@@ -9,16 +9,17 @@ public abstract class Tarea {
 	private String responsable;
 	private String complejidad;
 	private String fecha;
+
 	/**
 	 * 
-	 * @param proyectoId : id del prouecto al que pertenece
-	 * @param id : el id de la tarea unica
-	 * @param tipo : el tipo de la tarea
+	 * @param proyectoId  : id del prouecto al que pertenece
+	 * @param id          : el id de la tarea unica
+	 * @param tipo        : el tipo de la tarea
 	 * @param descripcion : descripcion de la tarea
-	 * @param estado : estado de la tarea
+	 * @param estado      : estado de la tarea
 	 * @param responsable : quien se supone que hace la tarea
 	 * @param complejidad : dificultad de la tarea
-	 * @param fecha : la fecha de creacion de la tarea
+	 * @param fecha       : la fecha de creacion de la tarea
 	 */
 	public Tarea(String proyectoId, String id, String tipo, String descripcion, String estado, String responsable,
 			String complejidad, String fecha) {
@@ -31,7 +32,7 @@ public abstract class Tarea {
 		this.complejidad = complejidad;
 		this.fecha = fecha;
 	}
-	
+
 	public abstract void accept(VisitorTarea visitor);
 
 	public String getProyectoId() {
@@ -64,14 +65,19 @@ public abstract class Tarea {
 
 	public String getFecha() {
 		return fecha;
-	}	
-	
-	public void setEstado(String estado) { this.estado = estado; }
-    public void setResponsable(String responsable) { this.responsable = responsable; }
-        
-    @Override
-    public String toString() {
-        return proyectoId + "|" + id + "|" + tipo + "|" + descripcion + "|" + 
-               estado + "|" + responsable + "|" + complejidad + "|" + fecha;
-    }
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public void setResponsable(String responsable) {
+		this.responsable = responsable;
+	}
+
+	@Override
+	public String toString() {
+		return proyectoId + "|" + id + "|" + tipo + "|" + descripcion + "|" + estado + "|" + responsable + "|"
+				+ complejidad + "|" + fecha;
+	}
 }

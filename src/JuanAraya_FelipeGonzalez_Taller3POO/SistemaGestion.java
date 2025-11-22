@@ -61,7 +61,7 @@ public class SistemaGestion {
 				String linea = lectorScanner.nextLine();
 				String[] parte = linea.split("\\|");
 				if (parte.length == 3) {
-					usuarios.add(new Usuario(parte[1], parte[2], parte[3]));
+					usuarios.add(new Usuario(parte[0], parte[1], parte[2]));
 				}
 			}
 			lectorScanner.close();
