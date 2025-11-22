@@ -293,9 +293,9 @@ public class SistemaGestion {
     }
     
     /**
-     * agrega una nueva tarea seg�n los datos ingresados por el usuario
+     * agrega una nueva tarea segun los datos ingresados por el usuario
      * solicita el id del proyecto y verifica que exista
-     * tambi�n pide el id de la tarea y comprueba que no est� repetido
+     * tambien pide el id de la tarea y comprueba que no este repetido
      * permite seleccionar tipo, estado y complejidad desde consola
      * asigna responsable y fecha actual a la tarea
      */
