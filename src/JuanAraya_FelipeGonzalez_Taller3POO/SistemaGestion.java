@@ -205,7 +205,7 @@ public class SistemaGestion {
      * 5 Eliminar tarea
      * 6 Asignar prioridades
      * 7 Generar reporte de proyectos
-     * 8 Cerrar sesión
+     * 8 Cerrar sesiï¿½n
      */
     private void menuAdministrador() {
         while (usuarioActual != null && usuarioActual.getRol().equals("Administrador")) {
@@ -293,9 +293,9 @@ public class SistemaGestion {
     }
     
     /**
-     * agrega una nueva tarea según los datos ingresados por el usuario
+     * agrega una nueva tarea segï¿½n los datos ingresados por el usuario
      * solicita el id del proyecto y verifica que exista
-     * también pide el id de la tarea y comprueba que no esté repetido
+     * tambiï¿½n pide el id de la tarea y comprueba que no estï¿½ repetido
      * permite seleccionar tipo, estado y complejidad desde consola
      * asigna responsable y fecha actual a la tarea
      */
@@ -528,7 +528,9 @@ public class SistemaGestion {
                              ", " + tarea.getComplejidad() + ", " + tarea.getFecha() + "]");
         }
     }
-    
+    /**
+     * el metodo para generar un reporte en un nuevo archivo txt
+     */
     private void generarReporte() {
         try {
             PrintWriter writer = new PrintWriter(new FileWriter("reporte.txt"));
@@ -562,11 +564,16 @@ public class SistemaGestion {
             System.out.println("Error al generar reporte: " + e.getMessage());
         }
     }
-    
+    /**
+     * el metodo para la fecha en el reporte, esta por default la fecha del 21 de noviembre 
+     * @return
+     */
     private String obtenerFechaActual() {
         return "2025-11-21"; 
     }
-    
+    /**
+     * el menu colaborador
+     */
     private void menuColaborador() {
         while (usuarioActual != null && usuarioActual.getRol().equals("Colaborador")) {
             System.out.println("Menu colaborador");
@@ -601,7 +608,9 @@ public class SistemaGestion {
         }
     }
     
-    
+    /**
+     * metodo para ver los proyectos que estan disponible
+     */
     private void verProyectosDisponibles() {
         System.out.println("Proyectos");
         for (Proyecto proyecto : proyectos) {
@@ -635,7 +644,9 @@ public class SistemaGestion {
             System.out.println("No tienes tareas asignadas.");
         }
     }
-    
+    /**
+     * el metodo para actualizar el estado que tiene una tarea
+     */
 	private void actualizarEstadoTarea() {
 		System.out.println("Actualizar Estado de Tarea");
 		System.out.print("ID de la tarea: ");
@@ -683,7 +694,9 @@ public class SistemaGestion {
 		guardarTareas();
 		System.out.println("Estado actualizado exitosamente a: " + nuevoEstado);
 	}
-    
+    /**
+     * el metodo para aplicar el visitor a las tareas
+     */
     private void aplicarVisitorTareas() {
         System.out.println("Aplicar Visitor a tareas");
         String miUsuario = usuarioActual.getUsername();
