@@ -138,10 +138,10 @@ public class SistemaGestion {
         }
     }
     public boolean login() {
-        System.out.println("Iniciar Sesión= ");
+        System.out.println("Iniciar Sesion= ");
         System.out.print("Usuario: ");
         String username = scanner.nextLine();
-        System.out.print("Contraseña: ");
+        System.out.print("Password: ");
         String password = scanner.nextLine();
         
         for (Usuario usuario : usuarios) {
@@ -152,13 +152,13 @@ public class SistemaGestion {
             }
         }
         
-        System.out.println("Usuario o contraseña incorrectos.");
+        System.out.println("Usuario o password incorrectos.");
         return false;
     }
     
     public void logout() {
         usuarioActual = null;
-        System.out.println("Sesión cerrada.");
+        System.out.println("Sesion cerrada.");
     }
     
     public void ejecutar() {
@@ -179,7 +179,7 @@ public class SistemaGestion {
     
     private void menuAdministrador() {
         while (usuarioActual != null && usuarioActual.getRol().equals("Administrador")) {
-            System.out.println("Menú Administrador= ");
+            System.out.println("Menu Administrador= ");
             System.out.println("1. Ver lista completa de proyectos y tareas");
             System.out.println("2. Agregar proyecto");
             System.out.println("3. Eliminar proyecto");
@@ -187,8 +187,8 @@ public class SistemaGestion {
             System.out.println("5. Eliminar tarea");
             System.out.println("6. Asignar prioridades");
             System.out.println("7. Generar reporte de proyectos");
-            System.out.println("8. Cerrar sesión");
-            System.out.print("Seleccione una opción: ");
+            System.out.println("8. Cerrar sesion");
+            System.out.print("Seleccione una opcion: ");
             
             String opcion = scanner.nextLine();
             
@@ -218,7 +218,7 @@ public class SistemaGestion {
                     logout();
                     return;
                 default:
-                    System.out.println("Opción inválida.");
+                    System.out.println("Opcion invalida.");
             }
         }
     }
@@ -291,7 +291,7 @@ public class SistemaGestion {
             guardarTareas();
             System.out.println("Proyecto y sus tareas eliminados exitosamente.");
         } else {
-            System.out.println("No se encontró el proyecto con ID: " + id);
+            System.out.println("No se encontro el proyecto con ID: " + id);
         }
     }
     
@@ -326,7 +326,7 @@ public class SistemaGestion {
         System.out.println("Tipo de tarea:");
         System.out.println("1. Bug");
         System.out.println("2. Feature");
-        System.out.println("3. Documentación");
+        System.out.println("3. Documentacion");
         System.out.print("Seleccione: ");
         String tipoOpcion = scanner.nextLine();
         
@@ -336,11 +336,11 @@ public class SistemaGestion {
             case "2": tipo = "Feature"; break;
             case "3": tipo = "Documentacion"; break;
             default:
-                System.out.println("Opción inválida.");
+                System.out.println("Opcion invalida.");
                 return;
         }
         
-        System.out.print("Descripción: ");
+        System.out.print("Descripcion: ");
         String descripcion = scanner.nextLine();
         
         System.out.println("Estado inicial:");
@@ -422,13 +422,13 @@ public class SistemaGestion {
             guardarTareas();
             System.out.println("Tarea eliminada exitosamente.");
         } else {
-            System.out.println("No se encontró la tarea con ID: " + tareaId);
+            System.out.println("No se encontro la tarea con ID: " + tareaId);
         }
     }
     
     private void menuPrioridades() {
         System.out.println("Asignar Prioridades");
-        System.out.println("1. Priorizar por fecha de creación");
+        System.out.println("1. Priorizar por fecha de creacion");
         System.out.println("2. Priorizar por impacto");
         System.out.println("3. Priorizar por complejidad");
         System.out.print("Seleccione estrategia: ");
@@ -446,7 +446,7 @@ public class SistemaGestion {
                 estrategiaPrioridad = new PrioridadPorComplejidad();
                 break;
             default:
-                System.out.println("Opción inválida.");
+                System.out.println("Opcion invalida.");
                 return;
         }
         
@@ -520,13 +520,13 @@ public class SistemaGestion {
     
     private void menuColaborador() {
         while (usuarioActual != null && usuarioActual.getRol().equals("Colaborador")) {
-            System.out.println("Menú colaborador");
+            System.out.println("Menu colaborador");
             System.out.println("1. Ver proyectos disponibles");
             System.out.println("2. Ver mis tareas asignadas");
             System.out.println("3. Actualizar estado de una tarea");
             System.out.println("4. Aplicar Visitor sobre tareas");
-            System.out.println("5. Cerrar sesión");
-            System.out.print("Seleccione una opción: ");
+            System.out.println("5. Cerrar sesion");
+            System.out.print("Seleccione una opcion: ");
             
             String opcion = scanner.nextLine();
             
@@ -547,7 +547,7 @@ public class SistemaGestion {
                     logout();
                     return;
                 default:
-                    System.out.println("Opción inválida.");
+                    System.out.println("Opcion invalida.");
             }
         }
     }
@@ -601,7 +601,7 @@ public class SistemaGestion {
         }
         
         if (tareaActualizar == null) {
-            System.out.println("No se encontró la tarea o no eres el responsable.");
+            System.out.println("No se encontro la tarea o no eres el responsable.");
             return;
         }
         
@@ -620,7 +620,7 @@ public class SistemaGestion {
             case "2": nuevoEstado = "En progreso"; break;
             case "3": nuevoEstado = "Completada"; break;
             default:
-                System.out.println("Opción inválida.");
+                System.out.println("Opcion invalida.");
                 return;
         }
         
