@@ -291,6 +291,7 @@ public class SistemaGestion {
         guardarProyectos();
         System.out.println("Proyecto agregado exitosamente.");
     }
+    
     /**
      * agrega una nueva tarea según los datos ingresados por el usuario
      * solicita el id del proyecto y verifica que exista
@@ -461,6 +462,19 @@ public class SistemaGestion {
         }
     }
     
+    
+	/**
+	 * este menu es para asignar prioridades a las tareas, esto permite elegir el metodo de
+	 * priorizacion desde la consola opciones disponibles 
+	 * 1 esto es parapriorizar por fecha de creacion 
+	 * 2 esti de aqui es para priorizar por impacto 
+	 * 3 esto preoriza por la complejidad
+	 * 
+	 *
+	 * y luego solicita el id del proyecto o la palabra all para considerar todas las
+	 * tareas si no hay tareas disponibles muestra un mensaje de aviso...
+	 *
+	 */
     private void menuPrioridades() {
         System.out.println("Asignar Prioridades");
         System.out.println("1. Priorizar por fecha de creacion");
@@ -622,47 +636,53 @@ public class SistemaGestion {
         }
     }
     
-    private void actualizarEstadoTarea() {
-        System.out.println("Actualizar Estado de Tarea");
-        System.out.print("ID de la tarea: ");
-        String tareaId = scanner.nextLine();
-        
-        Tarea tareaActualizar = null;
-        for (Tarea tarea : todasLasTareas) {
-            if (tarea.getId().equals(tareaId) && tarea.getResponsable().equals(usuarioActual.getUsername())) {
-                tareaActualizar = tarea;
-                break;
-            }
-        }
-        
-        if (tareaActualizar == null) {
-            System.out.println("No se encontro la tarea o no eres el responsable.");
-            return;
-        }
-        
-        System.out.println("Tarea actual: " + tareaActualizar.getDescripcion());
-        System.out.println("Estado actual: " + tareaActualizar.getEstado());
-        System.out.println("\nSeleccione nuevo estado:");
-        System.out.println("1. Pendiente");
-        System.out.println("2. En progreso");
-        System.out.println("3. Completada");
-        System.out.print("Seleccione: ");
-        String estadoOpcion = scanner.nextLine();
-        
-        String nuevoEstado = "";
-        switch (estadoOpcion) {
-            case "1": nuevoEstado = "Pendiente"; break;
-            case "2": nuevoEstado = "En progreso"; break;
-            case "3": nuevoEstado = "Completada"; break;
-            default:
-                System.out.println("Opcion invalida.");
-                return;
-        }
-        
-        tareaActualizar.setEstado(nuevoEstado);
-        guardarTareas();
-        System.out.println("Estado actualizado exitosamente a: " + nuevoEstado);
-    }
+	private void actualizarEstadoTarea() {
+		System.out.println("Actualizar Estado de Tarea");
+		System.out.print("ID de la tarea: ");
+		String tareaId = scanner.nextLine();
+
+		Tarea tareaActualizar = null;
+		for (Tarea tarea : todasLasTareas) {
+			if (tarea.getId().equals(tareaId) && tarea.getResponsable().equals(usuarioActual.getUsername())) {
+				tareaActualizar = tarea;
+				break;
+			}
+		}
+
+		if (tareaActualizar == null) {
+			System.out.println("No se encontro la tarea o no eres el responsable.");
+			return;
+		}
+
+		System.out.println("Tarea actual: " + tareaActualizar.getDescripcion());
+		System.out.println("Estado actual: " + tareaActualizar.getEstado());
+		System.out.println("\nSeleccione nuevo estado:");
+		System.out.println("1. Pendiente");
+		System.out.println("2. En progreso");
+		System.out.println("3. Completada");
+		System.out.print("Seleccione: ");
+		String estadoOpcion = scanner.nextLine();
+
+		String nuevoEstado = "";
+		switch (estadoOpcion) {
+		case "1":
+			nuevoEstado = "Pendiente";
+			break;
+		case "2":
+			nuevoEstado = "En progreso";
+			break;
+		case "3":
+			nuevoEstado = "Completada";
+			break;
+		default:
+			System.out.println("Opcion invalida.");
+			return;
+		}
+
+		tareaActualizar.setEstado(nuevoEstado);
+		guardarTareas();
+		System.out.println("Estado actualizado exitosamente a: " + nuevoEstado);
+	}
     
     private void aplicarVisitorTareas() {
         System.out.println("Aplicar Visitor a tareas");
