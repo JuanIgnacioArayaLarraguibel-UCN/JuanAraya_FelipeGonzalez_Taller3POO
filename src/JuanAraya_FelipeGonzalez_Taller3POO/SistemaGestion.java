@@ -45,7 +45,13 @@ public class SistemaGestion {
         cargarTareas();
     }
     
-	// lectores
+	/**
+	 * cargarUsuarios 
+	 * se encarga de la lectura del txt "usuarios"
+	 * 
+	 * esta lectura es dividida mas tarde en 3 partes
+	 * en caso de no haber txt a leer saltara: "Error al cargar usuarios: " + nombre del txt que trata de leer.
+	 */
 	public void cargarUsuarios() {
 		try {
 			File archivo = new File("usuarios.txt");
@@ -65,6 +71,13 @@ public class SistemaGestion {
 		}
 	}
 	
+	/**
+	 * cargarProyectos 
+	 * se encarga de la lectura del txt "proyectos"
+	 * 
+	 * esta lectura es dividida mas tarde en 3 partes
+	 * en caso de no haber txt a leer saltara: "Error al cargar proyectos: " + nombre del txt que trata de leer.
+	 */
 	private void cargarProyectos() {
         try {
             File archivo = new File("proyectos.txt");
@@ -83,36 +96,41 @@ public class SistemaGestion {
         }
     }
 	
+	/**
+	 * cargarTareas 
+	 * se encarga de la lectura del txt "tareas"
+	 * 
+	 * esta lectura es dividida mas tarde en 8 partes
+	 * en caso de no haber txt a leer saltara: "Error al cargar tareas: " + nombre del txt que trata de leer.
+	 */
 	private void cargarTareas() {
-        try {
-            File archivo = new File("tareas.txt");
-            Scanner lector = new Scanner(archivo);
-            
-            while (lector.hasNextLine()) {
-                String linea = lector.nextLine();
-                String[] partes = linea.split("\\|");
-                if (partes.length == 8) {
-                    Tarea tarea = TareaFactory.crearTarea(
-                        partes[0], partes[1], partes[2], partes[3], 
-                        partes[4], partes[5], partes[6], partes[7]
-                    );
-                    
-                    if (tarea != null) {
-                        todasLasTareas.add(tarea);
-                        for (Proyecto proyecto : proyectos) {
-                            if (proyecto.getId().equals(partes[0])) {
-                                proyecto.agregarTarea(tarea);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            lector.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Error al cargar tareas: " + e.getMessage());
-        }
-    }
+		try {
+			File archivo = new File("tareas.txt");
+			Scanner lector = new Scanner(archivo);
+
+			while (lector.hasNextLine()) {
+				String linea = lector.nextLine();
+				String[] partes = linea.split("\\|");
+				if (partes.length == 8) {
+					Tarea tarea = TareaFactory.crearTarea(partes[0], partes[1], partes[2], partes[3], partes[4],
+							partes[5], partes[6], partes[7]);
+
+					if (tarea != null) {
+						todasLasTareas.add(tarea);
+						for (Proyecto proyecto : proyectos) {
+							if (proyecto.getId().equals(partes[0])) {
+								proyecto.agregarTarea(tarea);
+								break;
+							}
+						}
+					}
+				}
+			}
+			lector.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Error al cargar tareas: " + e.getMessage());
+		}
+	}
 	
 	private void guardarProyectos() {
         try {
@@ -176,7 +194,19 @@ public class SistemaGestion {
             }
         }
     }
-    
+    /**
+     * el menuAdministrador. 
+     * contiene 8 opciones 
+     * Opciones disponibles:
+     * 1 Ver lista completa de proyectos y tareas
+     * 2 Agregar proyecto
+     * 3 Eliminar proyecto
+     * 4 Agregar tarea
+     * 5 Eliminar tarea
+     * 6 Asignar prioridades
+     * 7 Generar reporte de proyectos
+     * 8 Cerrar sesión
+     */
     private void menuAdministrador() {
         while (usuarioActual != null && usuarioActual.getRol().equals("Administrador")) {
             System.out.println("Menu Administrador= ");
@@ -223,23 +253,22 @@ public class SistemaGestion {
         }
     }
     
-    private void verProyectosYTareasCompleto() {
-        System.out.println("Lista de Tareas y Proyectos");
-        for (Proyecto proyecto : proyectos) {
-            System.out.println("Proyecto: " + proyecto.getNombre() + " (ID: " + proyecto.getId() + ")");
-            System.out.println("Responsable: " + proyecto.getResponsable());
-            System.out.println("Tareas:");
-            
-            if (proyecto.getTareas().isEmpty()) {
-                System.out.println("  No hay tareas asignadas.");
-            } else {
-                for (Tarea tarea : proyecto.getTareas()) {
-                    System.out.println("  - " + tarea.getId() + ": " + tarea.getDescripcion() + 
-                                     " [" + tarea.getTipo() + ", " + tarea.getEstado() + "]");
-                }
-            }
-        }
-    }
+	private void verProyectosYTareasCompleto() {
+		System.out.println("Lista de Tareas y Proyectos");
+		for (Proyecto proyecto : proyectos) {
+			System.out.println("Proyecto: " + proyecto.getNombre() + " (ID: " + proyecto.getId() + ")");
+			System.out.println("Responsable: " + proyecto.getResponsable());
+			System.out.println("Tareas:");
+
+			if (proyecto.getTareas().isEmpty()) {
+				System.out.println("  No hay tareas asignadas.");
+			} else {
+				for (Tarea tarea : proyecto.getTareas()) {
+					System.out.println("  - " + tarea.getId() + ": " + tarea.getDescripcion() + " [" + tarea.getTipo() + ", " + tarea.getEstado() + "]");
+				}
+			}
+		}
+	}
     
     private void agregarProyecto() {
         System.out.println("Agregar Proyecto");
@@ -262,7 +291,13 @@ public class SistemaGestion {
         guardarProyectos();
         System.out.println("Proyecto agregado exitosamente.");
     }
-    
+    /**
+     * agrega una nueva tarea según los datos ingresados por el usuario
+     * solicita el id del proyecto y verifica que exista
+     * también pide el id de la tarea y comprueba que no esté repetido
+     * permite seleccionar tipo, estado y complejidad desde consola
+     * asigna responsable y fecha actual a la tarea
+     */
     private void eliminarProyecto() {
         System.out.println("Eliminar Proyecto");
         System.out.print("ID del proyecto a eliminar: ");

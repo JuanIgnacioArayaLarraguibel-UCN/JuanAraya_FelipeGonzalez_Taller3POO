@@ -7,7 +7,7 @@ package JuanAraya_FelipeGonzalez_Taller3POO;
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println("=== SISTEMA DE GESTIÓN DE PROYECTOS ===");
+        System.out.println("=== SISTEMA DE GESTION DE PROYECTOS ===");
         System.out.println("TaskForge Ltda. - 2035");
         System.out.println("========================================");
         
