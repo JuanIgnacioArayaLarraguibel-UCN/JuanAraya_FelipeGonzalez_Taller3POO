@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SistemaGestion {
-	// supongo que aqui ira todo el desastre?
-
+	
 	private static SistemaGestion instancia;
     private List<Usuario> usuarios;
     private List<Proyecto> proyectos;
