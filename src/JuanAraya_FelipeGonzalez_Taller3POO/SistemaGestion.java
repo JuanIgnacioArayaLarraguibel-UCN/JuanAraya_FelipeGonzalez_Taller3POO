@@ -28,12 +28,16 @@ public class SistemaGestion {
         cargarDatos();
     }
     
-    public static SistemaGestion getInstancia() {
-        if (instancia == null) {
-            instancia = new SistemaGestion();
-        }
-        return instancia;
-    }
+    /**
+     * este es el metodo para obtener la instancia del sistema
+     * implementa el patron singleton si la instancia aun no existe la crea y retorna la instancia actual del sistema
+     */
+	public static SistemaGestion getInstancia() {
+		if (instancia == null) {
+			instancia = new SistemaGestion();
+		}
+		return instancia;
+	}
     
     /**
      * cargar los datos para el ordenamiento y las preferencias
@@ -154,6 +158,15 @@ public class SistemaGestion {
             System.out.println("Error al guardar tareas: " + e.getMessage());
         }
     }
+    
+    /**
+     * este legin es el metodo para iniciar sesion
+     * te solicitan nombre de usuario y la password 
+     * busca en la lista de usuarios para ver si hay alguna igual y si encuentra un usuario valido lo asigna como usuario actual
+     * muestra un mensaje de bienvenida y retorna true
+     *
+     * si no coincide ningun usuario y retorna false, osea te tira error
+     */
     public boolean login() {
         System.out.println("Iniciar Sesion= ");
         System.out.print("Usuario: ");
@@ -173,11 +186,22 @@ public class SistemaGestion {
         return false;
     }
     
+    /**
+     * el logout es el metodo para cerrar la sesion
+     */
     public void logout() {
         usuarioActual = null;
         System.out.println("Sesion cerrada.");
     }
     
+    /**
+     * este es el metodo principal que ejecuta el sistema
+     * si no hay un usuario autenticado solicita inicio de sesion y la password. Ya luego una vez hecho eso:
+     * 1 si el rol es Administrador abre el menu de administrador
+     * 2 si no abre el menu de colaborador
+     * 
+     * nota: el resto de metodos estan en private.
+     */
     public void ejecutar() {
         while (true) {
             if (usuarioActual == null) {
@@ -193,6 +217,7 @@ public class SistemaGestion {
             }
         }
     }
+    
     /**
      * el menuAdministrador. 
      * contiene 8 opciones 
